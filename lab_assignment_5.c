@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct node {
 	char letter;
@@ -9,15 +10,13 @@ typedef struct node {
 // Returns number of nodes in the linkedList.
 int length(node* head)
 {
-   struct node *tmp = head;
-    int len = 0;
-   while (tmp != NULL)
-   {
-      tmp = tmp->next;
-      len++;
-   }
-
-   return (len);
+	int i = 0;
+	node* temp = head;
+	while(temp != NULL){
+		i++;
+		temp = temp->next;
+	}
+	return i;
 }
 
 // parses the string in the linkedList
@@ -25,6 +24,15 @@ int length(node* head)
 //  then toCString function wil return "abc"
 char* toCString(node* head)
 {
+	node* temp = head;
+	int num;
+	num = length(head);
+	char* newString = (char*)malloc(num);
+	for (int i = 0; i < num; i++) {
+		newString[i] = temp->letter;
+		temp = temp->next;
+	}
+	return newString;
 }
 
 // inserts character to the linkedlist
@@ -33,11 +41,31 @@ char* toCString(node* head)
 // head -> |a|->|b|->|c|->|x|
 void insertChar(node** pHead, char c)
 {
+	node* newNode = (node*)malloc(sizeof(node));
+	newNode->letter = c;
+	newNode->next = NULL;
+	if (*pHead == NULL) {
+		*pHead = newNode;
+	}
+	else {
+		node* temp = *pHead;
+		while (temp->next != NULL){
+			temp = temp->next;
+		}
+		temp->next = newNode;
+	}
 }
 
 // deletes all nodes in the linkedList.
 void deleteList(node** pHead)
 {
+	node* temp = *pHead;
+	while (temp != NULL) {
+		*pHead = temp->next;
+		free(temp);
+		temp = *pHead;
+	}
+	*pHead = NULL;
 }
 
 int main(void)
